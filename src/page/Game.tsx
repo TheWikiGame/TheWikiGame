@@ -21,10 +21,10 @@ const end = {
 
 export const Game = ({className, ...props}: GameProps) => {
     return (
-        <div className={`${className}`} {...props}>
-            <h2>From <a href={start.href} target="_blank">{start.title}</a> to <a href={end.href} target="_blank">{end.title}</a></h2>
-            <History pages={[]} />
-            <Options pages={[]} />
+        <div className={`${className} grid grid-cols-4 gap-4`} {...props}>
+            <h2 className={'col-span-4'}>From <a href={start.href} target="_blank">{start.title}</a> to <a href={end.href} target="_blank">{end.title}</a></h2>
+            <History className={'col-span-1'} pages={[]}/>
+            <Options className={'col-span-3'} pages={[]} />
         </div>
     )
 }
