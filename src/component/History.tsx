@@ -9,7 +9,7 @@ export const History = ({ className, pages, ...props }: HistoryProps) => {
     <div className={`${className}`} {...props}>
       <h2>History</h2>
       {pages.map((page) => (
-        <a href={page.href}>{page.title}</a>
+        <a key={page.page} href={page.href}>{page.title}</a>
       ))}
     </div>
   );
