@@ -77,4 +77,13 @@ async function getLinkedInternalPagesFromArticleTitle(
   return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
 }
 
-export { getLinkedInternalPagesFromArticleTitle };
+async function getRandomPage(): Promise<Page> {
+  // Placeholder
+  return {
+    page: "Cat",
+    title: "Cat",
+    href: "https://en.wikipedia.org/wiki/Cat",
+  } as Page;
+}
+
+export { getLinkedInternalPagesFromArticleTitle, getRandomPage };
