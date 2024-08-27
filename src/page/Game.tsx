@@ -9,16 +9,12 @@ import {
 import { InlinePage } from "../component/InlinePage";
 import { logger } from "../util/Logger";
 import { GameCompletedModal } from "../component/GameCompletedModal";
+import { GameState } from "../model/GameState";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
 export const Game = ({ className, ...props }: GameProps) => {
-  const [gameState, setGameState] = useState<{
-    start?: Page;
-    end?: Page;
-    current?: Page;
-    history: Page[];
-  }>({
+  const [gameState, setGameState] = useState<GameState>({
     history: [],
   });
   const [options, setOptions] = useState<Page[]>([]);
