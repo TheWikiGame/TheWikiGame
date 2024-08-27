@@ -23,6 +23,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   });
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [optionsLoading, setOptionsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   logger.debug("Rendering Game page");
 
@@ -58,7 +59,7 @@ export const Game = ({ className, ...props }: GameProps) => {
       if (current == undefined) {
         return;
       }
-      setIsLoading(true);
+      setOptionsLoading(true);
       try {
         const linkedPages = await getLinkedInternalPagesFromArticleTitle(
           current.title
@@ -68,7 +69,7 @@ export const Game = ({ className, ...props }: GameProps) => {
         logger.error("Failed to fetch linked pages:", error);
         setOptions([]);
       }
-      setIsLoading(false);
+      setOptionsLoading(false);
     };
 
     fetchOptions();
@@ -103,6 +104,7 @@ export const Game = ({ className, ...props }: GameProps) => {
       <div className={`grid grid-cols-4 gap-4 h-full`}>
         <History className={"col-span-1"} pages={history} />
         <Options
+          loading={optionsLoading}
           currentPage={current}
           className={"col-span-3"}
           onSelect={handlePageSelected}

@@ -4,8 +4,10 @@ import Fuse from "fuse.js";
 import { Input } from "./Input";
 import { PageLink } from "./PageLink";
 import { InlinePage } from "./InlinePage";
+import { PageLinkSkeletonGroup } from "./PageLinkSkeletonGroup";
 
 type OptionsProps = {
+  loading: boolean;
   currentPage: Page;
   pages: Page[];
   onSelect: (page: Page) => void;
@@ -13,6 +15,7 @@ type OptionsProps = {
 
 export const Options = ({
   className,
+  loading,
   currentPage,
   pages,
   onSelect,
@@ -53,12 +56,17 @@ export const Options = ({
         value={searchText}
         placeholder="Link"
         onChange={handleSearchChange}
+        disabled={loading}
       />
-      <div className={"flex flex-col"}>
-        {filteredPages.map((page) => (
-          <PageLink key={page.page} page={page} onClick={onSelect} />
-        ))}
-      </div>
+      {loading ? (
+        <PageLinkSkeletonGroup className={"flex flex-col space-y-2"} />
+      ) : (
+        <div className={"flex flex-col space-y-2"}>
+          {filteredPages.map((page) => (
+            <PageLink key={page.page} page={page} onClick={onSelect} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
