@@ -44,6 +44,14 @@ export const Options = ({
     []
   );
 
+  const handleOptionSelected = useCallback(
+    (page: Page) => {
+      setSearchText("");
+      onSelect(page);
+    },
+    [onSelect]
+  );
+
   return (
     <div className={`${className}`} {...props}>
       <h2>
@@ -63,7 +71,11 @@ export const Options = ({
       ) : (
         <div className={"flex flex-col space-y-2"}>
           {filteredPages.map((page) => (
-            <PageLink key={page.page} page={page} onClick={onSelect} />
+            <PageLink
+              key={page.page}
+              page={page}
+              onClick={handleOptionSelected}
+            />
           ))}
         </div>
       )}
