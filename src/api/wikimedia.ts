@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { Page } from "../model/Page";
 import { InternalLinksResponse } from "../model/InternalLink";
+import { WikimediaApiParams } from "../model/Wikimedia";
 
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
