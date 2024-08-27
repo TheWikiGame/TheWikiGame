@@ -5,9 +5,18 @@ import { Input } from "./Input";
 import { PageLink } from "./PageLink";
 
 type OptionsProps = {
+  currentPage: Page;
   pages: Page[];
-} & React.ComponentProps<"div">;
-export const Options = ({ className, pages, ...props }: OptionsProps) => {
+  onSelect: (page: Page) => void;
+} & Omit<React.ComponentProps<"div">, "onSelect">;
+
+export const Options = ({
+  className,
+  currentPage,
+  pages,
+  onSelect,
+  ...props
+}: OptionsProps) => {
   const [searchText, setSearchText] = useState("");
 
   const fuse = useMemo(
@@ -33,7 +42,7 @@ export const Options = ({ className, pages, ...props }: OptionsProps) => {
 
   return (
     <div className={`${className}`} {...props}>
-      <h2>Choices</h2>
+      <h2>Links from {currentPage.page}</h2>
       <Input
         label={"Link filter"}
         id={"link-filter"}
@@ -44,7 +53,7 @@ export const Options = ({ className, pages, ...props }: OptionsProps) => {
       />
       <div className={"flex flex-col"}>
         {filteredPages.map((page) => (
-          <PageLink key={page.page} page={page} />
+          <PageLink key={page.page} page={page} onClick={onSelect} />
         ))}
       </div>
     </div>

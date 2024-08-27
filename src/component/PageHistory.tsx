@@ -1,7 +1,7 @@
 import React from "react";
 import { Page } from "../model/Page";
 import { PageLink } from "./PageLink";
-import { Circle, ArrowDown } from "lucide-react";
+// import { Circle, ArrowDown } from "lucide-react";
 
 type PageHistoryProps = {
   pages: Page[];
@@ -15,8 +15,11 @@ export const PageHistory = ({
   return (
     <div className={`relative ${className}`} {...props}>
       <div className="absolute left-1/2 top-10 bottom-10 w-0.5 bg-[var(--border-color)] transform -translate-x-1/2" />
-      {pages.map((page) => (
-        <div key={page.href} className="relative flex flex-col items-center">
+      {pages.map((page, index) => (
+        <div
+          key={`${index}-${page.href}`}
+          className="relative flex flex-col items-center"
+        >
           {/* {index !== 0 ? (
             <ArrowDown size={16} className="z-10 text-[var(--border-color)]" />
           ) : (
