@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from "axios";
 import { Page } from "../../model/Page";
 import { InternalLinksResponse } from "../../model/InternalLink";
-import { WikimediaApiParams } from "../../model/Wikimedia";
 import {
   WikimediaApiAction,
+  WikimediaApiParams,
   WikimediaApiProp,
   WikimediaApiResponseFormat,
   WikimediaNamespace,

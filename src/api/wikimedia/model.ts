@@ -1,3 +1,8 @@
+type WikimediaApiParams = {
+  action: string;
+  [key: string]: string | number | boolean;
+};
+
 enum WikimediaApiAction {
   Parse = "parse",
   Query = "query",
@@ -22,3 +27,5 @@ export {
   WikimediaApiResponseFormat,
   WikimediaNamespace,
 };
+
+export type { WikimediaApiParams };
