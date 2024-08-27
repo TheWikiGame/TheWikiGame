@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
 import { InternalLinksResponse } from "../model/InternalLink";
 
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
@@ -13,12 +13,6 @@ const wikimediaApiClient: AxiosInstance = axios.create({
     format: JSON_RESPONSE_FORMAT,
   },
 });
-
-// Interface for common API parameters
-interface WikimediaApiParams {
-  action: string;
-  [key: string]: string | number | boolean;
-}
 
 // Generic function to make Wikimedia API calls
 async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {

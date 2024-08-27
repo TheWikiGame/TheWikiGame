@@ -1,4 +1,4 @@
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
 import { PageLink } from "./PageLink";
 
 type HistoryProps = {
