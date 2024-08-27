@@ -31,8 +31,8 @@ export const Game = ({ className, ...props }: GameProps) => {
         </a>
       </h2>
       <div className={`grid grid-cols-4 gap-4 h-full`}>
-        <History className={"col-span-1"} pages={[]} />
-        <Options className={"col-span-3"} pages={[]} />
+        <History className={"col-span-1"} pages={[start, end]} />
+        <Options className={"col-span-3"} pages={[start, end]} />
       </div>
     </div>
   );

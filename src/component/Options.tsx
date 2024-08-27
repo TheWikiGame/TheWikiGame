@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Page } from "../model/page";
 import Fuse from "fuse.js";
 import { Input } from "./Input";
+import { PageLink } from "./PageLink";
 
 type OptionsProps = {
   pages: Page[];
@@ -43,9 +44,7 @@ export const Options = ({ className, pages, ...props }: OptionsProps) => {
       />
       <div className={"flex flex-col"}>
         {filteredPages.map((page) => (
-          <a key={page.page} href={page.href}>
-            {page.title}
-          </a>
+          <PageLink key={page.page} page={page} />
         ))}
       </div>
     </div>
