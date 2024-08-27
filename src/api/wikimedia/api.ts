@@ -9,6 +9,7 @@ import {
   WikimediaNamespace,
 } from "./model";
 import { RandomPageResponse } from "../../model/Random";
+import { logger } from "../../util/Logger";
 
 const BASE_WIKIMEDIA_API_ENDPOINT = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
@@ -27,7 +28,7 @@ async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
     const response = await wikimediaApiClient.get("", { params });
     return response.data;
   } catch (error) {
-    console.error("API call failed:", error);
+    logger.error("API call failed:", error);
     throw error;
   }
 }
@@ -51,7 +52,7 @@ async function getPageTitlesOfInternalLinksFromBodyOfArticle(
       WikimediaNamespace.MainNamespace
     );
   } catch (error) {
-    console.error("Failed to fetch internal links:", error);
+    logger.error("Failed to fetch internal links:", error);
     throw new Error("Failed to fetch internal links");
   }
 }
@@ -104,7 +105,7 @@ async function retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
       buildPageFromArticleTitle(page.title)
     );
   } catch (error) {
-    console.error("Failed to fetch random pages:", error);
+    logger.error("Failed to fetch random pages:", error);
     throw new Error("Failed to fetch random pages");
   }
 }

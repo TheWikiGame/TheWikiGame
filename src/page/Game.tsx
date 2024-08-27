@@ -7,6 +7,7 @@ import {
   retrieveRandomWikipediaArticles,
 } from "../api/wikimedia/api";
 import { InlinePage } from "../component/InlinePage";
+import { logger } from "../util/Logger";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -21,7 +22,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   });
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("rendnig");
+  logger.debug("Rendering Game page");
 
   const { start, end, current, history } = useMemo(
     () => gameState,
@@ -29,7 +30,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   );
 
   useEffect(() => {
-    console.log("initializing");
+    logger.debug("Initializing game state");
     const initializeGame = async () => {
       setIsLoading(true);
       try {
@@ -41,7 +42,7 @@ export const Game = ({ className, ...props }: GameProps) => {
           history: [startPage],
         });
       } catch (error) {
-        console.error("Failed to fetch linked pages:", error);
+        logger.error("Failed to fetch linked pages:", error);
       }
       setIsLoading(false);
     };
@@ -50,7 +51,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   }, []);
 
   useEffect(() => {
-    console.log("fetching new options");
+    logger.debug("Retrieving internal links on current page");
     const fetchOptions = async () => {
       if (current == undefined) {
         return;
@@ -62,7 +63,7 @@ export const Game = ({ className, ...props }: GameProps) => {
         );
         setOptions(linkedPages);
       } catch (error) {
-        console.error("Failed to fetch linked pages:", error);
+        logger.error("Failed to fetch linked pages:", error);
         setOptions([]);
       }
       setIsLoading(false);
