@@ -17,6 +17,7 @@
   --text-primary: theme('colors.gray.900');
   --bg-secondary: theme('colors.gray.100');
   --text-secondary: theme('colors.blue.600');
+  --border-color: theme('colors.gray.300');
 
   color: var(--text-primary);
   background-color: var(--bg-primary);
@@ -27,6 +28,7 @@
   --text-primary: theme('colors.gray.100');
   --bg-secondary: theme('colors.gray.800');
   --text-secondary: theme('colors.blue.400');
+  --border-color: theme('colors.gray.300');
 
   color: var(--text-primary);
   background-color: var(--bg-primary);

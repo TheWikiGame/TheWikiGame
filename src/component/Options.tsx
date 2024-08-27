@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Page } from "../model/page";
 import Fuse from "fuse.js";
+import { Input } from "./Input";
 
 type OptionsProps = {
   pages: Page[];
@@ -32,7 +33,14 @@ export const Options = ({ className, pages, ...props }: OptionsProps) => {
   return (
     <div className={`${className}`} {...props}>
       <h2>Choices</h2>
-      <input type="text" value={searchText} onChange={handleSearchChange} />
+      <Input
+        label={"Link filter"}
+        id={"link-filter"}
+        type="text"
+        value={searchText}
+        placeholder="Link"
+        onChange={handleSearchChange}
+      />
       <div className={"flex flex-col"}>
         {filteredPages.map((page) => (
           <a key={page.page} href={page.href}>

@@ -19,8 +19,8 @@ const end = {
 
 export const Game = ({ className, ...props }: GameProps) => {
   return (
-    <div className={`${className} grid grid-cols-4 gap-4`} {...props}>
-      <h2 className={"col-span-4"}>
+    <div className={`${className} h-screen`} {...props}>
+      <h2 className={""}>
         From{" "}
         <a href={start.href} target="_blank">
           {start.title}
@@ -30,8 +30,10 @@ export const Game = ({ className, ...props }: GameProps) => {
           {end.title}
         </a>
       </h2>
-      <History className={"col-span-1"} pages={[]} />
-      <Options className={"col-span-3"} pages={[]} />
+      <div className={`grid grid-cols-4 gap-4 h-full`}>
+        <History className={"col-span-1"} pages={[]} />
+        <Options className={"col-span-3"} pages={[]} />
+      </div>
     </div>
   );
 };
