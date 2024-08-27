@@ -6,7 +6,7 @@ export const PageLinkSkeletonGroup = ({
   className,
   ...props
 }: PageLinkSkeletonGroupProps) => {
-  const num = 5; // Number of skeleton items
+  const num = Math.floor(Math.random() * 5 + 1);
 
   return (
     <div className={`${className}`} {...props}>
