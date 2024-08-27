@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import { Page } from "../model/Page";
 import Fuse from "fuse.js";
-import { Input } from "./Input";
+import { Input, PageFilter } from "./PageFilter";
 import { PageLink } from "./PageLink";
 import { InlinePage } from "./InlinePage";
 import { PageLinkSkeletonGroup } from "./PageLinkSkeletonGroup";
+import { PagePreview } from "./PagePreview";
 
 type OptionsProps = {
   loading: boolean;
@@ -57,12 +58,8 @@ export const Options = ({
       <h2>
         Links from <InlinePage page={currentPage} />
       </h2>
-      <Input
-        label={"Link filter"}
-        id={"link-filter"}
-        type="text"
+      <PageFilter
         value={searchText}
-        placeholder="Link"
         onChange={handleSearchChange}
         disabled={loading}
       />
