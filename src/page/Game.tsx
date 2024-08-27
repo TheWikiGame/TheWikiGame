@@ -1,33 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Page } from "../model/Page";
 import { History } from "../component/History";
 import { Options } from "../component/Options";
-import { getLinkedInternalPagesFromArticleTitle } from "../api/wikimedia/api";
+import {
+  getLinkedInternalPagesFromArticleTitle,
+  retrieveRandomWikipediaArticles,
+} from "../api/wikimedia/api";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
-const start = {
-  page: "Pet_door",
-  title: "Pet door",
-  href: "https://en.wikipedia.org/wiki/Pet_door",
-} as Page;
-
-const end = {
-  page: "Black-throated_loon",
-  title: "Black-throated loon",
-  href: "https://en.wikipedia.org/wiki/Black-throated_loon",
-} as Page;
-
 export const Game = ({ className, ...props }: GameProps) => {
+  const [gameState, setGameState] = useState<{
+    start?: Page;
+    end?: Page;
+    current?: Page;
+    history: Page[];
+  }>({
+    history: [],
+  });
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  console.log("rendnig");
+
+  const { start, end, current, history } = useMemo(
+    () => gameState,
+    [gameState]
+  );
 
   useEffect(() => {
+    console.log("initializing");
+    const initializeGame = async () => {
+      setIsLoading(true);
+      try {
+        const [startPage, endPage] = await retrieveRandomWikipediaArticles(2);
+        setGameState({
+          start: startPage,
+          end: endPage,
+          current: startPage,
+          history: [startPage],
+        });
+      } catch (error) {
+        console.error("Failed to fetch linked pages:", error);
+      }
+      setIsLoading(false);
+    };
+
+    initializeGame();
+  }, []);
+
+  useEffect(() => {
+    console.log("fetching new options");
     const fetchOptions = async () => {
+      if (current == undefined) {
+        return;
+      }
       setIsLoading(true);
       try {
         const linkedPages = await getLinkedInternalPagesFromArticleTitle(
-          start.title
+          current.title
         );
         setOptions(linkedPages);
       } catch (error) {
@@ -38,9 +68,19 @@ export const Game = ({ className, ...props }: GameProps) => {
     };
 
     fetchOptions();
-  }, [start]);
+  }, [current]);
 
-  if (isLoading) return <>Loading...</>;
+  const handlePageSelected = useCallback((page: Page) => {
+    setGameState((prevState) => {
+      return {
+        ...prevState,
+        current: page,
+        history: [...prevState.history, page],
+      };
+    });
+  }, []);
+
+  if (isLoading || !start || !end || !current) return <>Loading...</>;
   return (
     <div className={`${className} h-screen`} {...props}>
       <h2 className={""}>
@@ -54,8 +94,13 @@ export const Game = ({ className, ...props }: GameProps) => {
         </a>
       </h2>
       <div className={`grid grid-cols-4 gap-4 h-full`}>
-        <History className={"col-span-1"} pages={[start, end]} />
-        <Options className={"col-span-3"} pages={options} />
+        <History className={"col-span-1"} pages={history} />
+        <Options
+          currentPage={current}
+          className={"col-span-3"}
+          onSelect={handlePageSelected}
+          pages={options}
+        />
       </div>
     </div>
   );
