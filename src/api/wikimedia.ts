@@ -1,12 +1,15 @@
 import axios, { AxiosInstance } from "axios";
+import { Page } from "../model/page";
 
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
+const ORIGIN_FOR_CORS_SUPPORT = "*";
+const JSON_RESPONSE_FORMAT = "json";
 
 const wikimediaApiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   params: {
-    origin: "*", // Required for CORS support
-    format: "json", // We want the API to return JSON
+    origin: ORIGIN_FOR_CORS_SUPPORT,
+    format: JSON_RESPONSE_FORMAT,
   },
 });
 
@@ -16,8 +19,8 @@ interface WikimediaApiParams {
   [key: string]: string | number | boolean;
 }
 
-// Generic function to make API calls
-async function makeApiCall<T>(params: WikimediaApiParams): Promise<T> {
+// Generic function to make Wikimedia API calls
+async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
   try {
     const response = await wikimediaApiClient.get("", { params });
     return response.data;
@@ -27,39 +30,73 @@ async function makeApiCall<T>(params: WikimediaApiParams): Promise<T> {
   }
 }
 
+type InternalLink = {
+  ns: number;
+  exists: string;
+  "*": string;
+};
+
 interface InternalLinksResponse {
   parse: {
     title: string;
-    links: Array<{
-      ns: number;
-      exists: string;
-      "*": string;
-    }>;
+    links: Array<InternalLink>;
   };
 }
 
-// API call function to get internal links of an article
-async function getInternalLinks(title: string): Promise<string[]> {
-  const params: WikimediaApiParams = {
+async function getPageTitlesOfInternalLinksFromBodyOfArticle(
+  articleTitle: string
+): Promise<string[]> {
+  const retrieveInternalLinksParams: WikimediaApiParams = {
     action: "parse",
-    page: title,
+    page: articleTitle,
     prop: "links",
     format: "json",
   };
 
   try {
-    const response = await makeApiCall<InternalLinksResponse>(params);
-
-    // Filter links to keep only internal Wikipedia article links (namespace 0)
-    const internalLinks = response.parse.links
-      .filter((link) => link.ns === 0)
-      .map((link) => link["*"]);
-
-    return internalLinks;
+    const response = await makeWikimediaRequest<InternalLinksResponse>(
+      retrieveInternalLinksParams
+    );
+    return filterLinksInResponseByNamespace(response);
   } catch (error) {
     console.error("Failed to fetch internal links:", error);
     throw new Error("Failed to fetch internal links");
   }
 }
 
-export { getInternalLinks };
+const MAIN_WIKIPEDIA_NAMESPACE = 0;
+function filterLinksInResponseByNamespace(
+  response: InternalLinksResponse,
+  namespace: number = MAIN_WIKIPEDIA_NAMESPACE
+): string[] {
+  return response.parse.links
+    .filter((link) => link.ns === namespace)
+    .map((link) => link["*"]);
+}
+
+function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
+  return titles.map((title) => buildPageFromArticleTitle(title));
+}
+
+function buildPageFromArticleTitle(articleTitle: string): Page {
+  return {
+    title: articleTitle,
+    page: articleTitle,
+    href: "",
+  };
+}
+
+async function getLinkedInternalPagesFromArticle(
+  articleTitle: string
+): Promise<Array<Page>> {
+  let pageTitlesOfInternalLinks =
+    await getPageTitlesOfInternalLinksFromBodyOfArticle(articleTitle);
+  return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
+}
+
+export {
+  getLinkedInternalPagesFromArticle,
+  buildPageFromArticleTitle,
+  filterLinksInResponseByNamespace,
+  listOfTitlesToListOfPages,
+};
