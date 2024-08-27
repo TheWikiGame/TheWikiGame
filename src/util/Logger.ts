@@ -5,6 +5,13 @@ enum LogLevel {
   ERROR = 3,
 }
 
+enum LogLevelTags {
+  DEBUG = "[D]",
+  INFO = "[I]",
+  WARN = "[W]",
+  ERROR = "[E]",
+}
+
 class Logger {
   private level: LogLevel;
 
@@ -26,25 +33,25 @@ class Logger {
 
   debug(...args: unknown[]): void {
     if (this.level <= LogLevel.DEBUG) {
-      console.log("[DEBUG]", ...args);
+      console.log(LogLevelTags.DEBUG, ...args);
     }
   }
 
   info(...args: unknown[]): void {
     if (this.level <= LogLevel.INFO) {
-      console.info("[INFO]", ...args);
+      console.info(LogLevelTags.INFO, ...args);
     }
   }
 
   warn(...args: unknown[]): void {
     if (this.level <= LogLevel.WARN) {
-      console.warn("[WARN]", ...args);
+      console.warn(LogLevelTags.WARN, ...args);
     }
   }
 
   error(...args: unknown[]): void {
     if (this.level <= LogLevel.ERROR) {
-      console.error("[ERROR]", ...args);
+      console.error(LogLevelTags.ERROR, ...args);
     }
   }
 
