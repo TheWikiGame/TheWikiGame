@@ -12,23 +12,22 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-
-  --bg-primary: theme('colors.white');
-  --text-primary: theme('colors.gray.900');
-  --bg-secondary: theme('colors.gray.100');
-  --text-secondary: theme('colors.blue.600');
-  --border-color: theme('colors.gray.300');
+  --bg-primary: theme("colors.white");
+  --text-primary: theme("colors.gray.900");
+  --bg-secondary: theme("colors.gray.100");
+  --text-secondary: theme("colors.blue.600");
+  --border-color: theme("colors.gray.300");
 
   color: var(--text-primary);
   background-color: var(--bg-primary);
 }
 
 .dark {
-  --bg-primary: theme('colors.gray.900');
-  --text-primary: theme('colors.gray.100');
-  --bg-secondary: theme('colors.gray.800');
-  --text-secondary: theme('colors.blue.400');
-  --border-color: theme('colors.gray.300');
+  --bg-primary: theme("colors.gray.900");
+  --text-primary: theme("colors.gray.100");
+  --bg-secondary: theme("colors.gray.800");
+  --text-secondary: theme("colors.blue.400");
+  --border-color: theme("colors.gray.300");
 
   color: var(--text-primary);
   background-color: var(--bg-primary);
