@@ -3,6 +3,7 @@ import { Page } from "../model/Page";
 import Fuse from "fuse.js";
 import { Input } from "./Input";
 import { PageLink } from "./PageLink";
+import { InlinePage } from "./InlinePage";
 
 type OptionsProps = {
   currentPage: Page;
@@ -42,7 +43,9 @@ export const Options = ({
 
   return (
     <div className={`${className}`} {...props}>
-      <h2>Links from {currentPage.page}</h2>
+      <h2>
+        Links from <InlinePage page={currentPage} />
+      </h2>
       <Input
         label={"Link filter"}
         id={"link-filter"}

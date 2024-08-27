@@ -6,6 +6,7 @@ import {
   getLinkedInternalPagesFromArticleTitle,
   retrieveRandomWikipediaArticles,
 } from "../api/wikimedia/api";
+import { InlinePage } from "../component/InlinePage";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -84,14 +85,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   return (
     <div className={`${className} h-screen`} {...props}>
       <h2 className={""}>
-        From{" "}
-        <a href={start.href} target="_blank">
-          {start.title}
-        </a>{" "}
-        to{" "}
-        <a href={end.href} target="_blank">
-          {end.title}
-        </a>
+        From <InlinePage page={start} /> to <InlinePage page={end} />
       </h2>
       <div className={`grid grid-cols-4 gap-4 h-full`}>
         <History className={"col-span-1"} pages={history} />
