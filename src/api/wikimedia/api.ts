@@ -10,6 +10,7 @@ import {
 } from "./model";
 import { RandomPageResponse } from "../../model/Random";
 import { logger } from "../../util/Logger";
+import { WikimediaExtractResponse } from "../../model/Extract";
 
 const BASE_WIKIMEDIA_API_ENDPOINT = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
@@ -110,7 +111,34 @@ async function retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
   }
 }
 
+async function getFirstParagraphOfArticleWithTitle(
+  articleTitle: string
+): Promise<string> {
+  const retrievePlaintextFirstParagraphParams: WikimediaApiParams = {
+    action: WikimediaApiAction.Query,
+    prop: WikimediaApiProp.Extracts,
+    exintro: true,
+    exlimit: 1, // Querying for the first paragraph of one article, only need one extract
+    titles: articleTitle,
+    format: WikimediaApiResponseFormat.JSON,
+    explaintext: true, // "ex[cerpt]Plaintext"; We want plaintext, not HTML
+  };
+
+  try {
+    const response = await makeWikimediaRequest<WikimediaExtractResponse>(
+      retrievePlaintextFirstParagraphParams
+    );
+    const pages = response.query.pages;
+    const pageId = Object.keys(pages)[0];
+    return pages[pageId].extract;
+  } catch (error) {
+    logger.error("Failed to fetch article abstract:", error);
+    return "";
+  }
+}
+
 export {
   getLinkedInternalPagesFromArticleTitle,
   retrieveRandomWikipediaArticles,
+  getFirstParagraphOfArticleWithTitle,
 };
