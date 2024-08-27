@@ -1,14 +1,14 @@
 import axios, { AxiosInstance } from "axios";
-import { Page } from "../model/Page";
-import { InternalLinksResponse } from "../model/InternalLink";
-import { WikimediaApiParams } from "../model/Wikimedia";
+import { Page } from "../../model/Page";
+import { InternalLinksResponse } from "../../model/InternalLink";
+import { WikimediaApiParams } from "../../model/Wikimedia";
 import {
   WikimediaApiAction,
   WikimediaApiProp,
   WikimediaApiResponseFormat,
   WikimediaNamespace,
-} from "./model/WikimediaApiModel";
-import { RandomPageResponse } from "../model/Random";
+} from "./model";
+import { RandomPageResponse } from "../../model/Random";
 
 const BASE_WIKIMEDIA_API_ENDPOINT = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";

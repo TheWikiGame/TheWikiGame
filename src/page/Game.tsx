@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Page } from "../model/Page";
 import { History } from "../component/History";
 import { Options } from "../component/Options";
-import { getLinkedInternalPagesFromArticleTitle } from "../api/WikimediaApi";
+import { getLinkedInternalPagesFromArticleTitle } from "../api/wikimedia/api";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
