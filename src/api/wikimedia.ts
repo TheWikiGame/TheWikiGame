@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from "axios";
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
+import { InternalLinksResponse } from "../model/InternalLink";
+import { WikimediaApiParams } from "../model/Wikimedia";
 
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
@@ -13,12 +15,6 @@ const wikimediaApiClient: AxiosInstance = axios.create({
   },
 });
 
-// Interface for common API parameters
-interface WikimediaApiParams {
-  action: string;
-  [key: string]: string | number | boolean;
-}
-
 // Generic function to make Wikimedia API calls
 async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
   try {
@@ -28,19 +24,6 @@ async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
     console.error("API call failed:", error);
     throw error;
   }
-}
-
-type InternalLink = {
-  ns: number;
-  exists: string;
-  "*": string;
-};
-
-interface InternalLinksResponse {
-  parse: {
-    title: string;
-    links: Array<InternalLink>;
-  };
 }
 
 async function getPageTitlesOfInternalLinksFromBodyOfArticle(
@@ -89,7 +72,7 @@ function buildPageFromArticleTitle(articleTitle: string): Page {
 async function getLinkedInternalPagesFromArticleTitle(
   articleTitle: string
 ): Promise<Array<Page>> {
-  let pageTitlesOfInternalLinks =
+  const pageTitlesOfInternalLinks =
     await getPageTitlesOfInternalLinksFromBodyOfArticle(articleTitle);
   return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
 }

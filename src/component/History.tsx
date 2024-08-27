@@ -1,4 +1,5 @@
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
+import { PageHistory } from "./PageHistory";
 import { PageLink } from "./PageLink";
 
 type HistoryProps = {
@@ -9,9 +10,10 @@ export const History = ({ className, pages, ...props }: HistoryProps) => {
   return (
     <div className={`${className}`} {...props}>
       <h2>History</h2>
-      {pages.map((page) => (
+      <PageHistory pages={pages} />
+      {/* {pages.map((page) => (
         <PageLink key={page.page} page={page} />
-      ))}
+      ))} */}
     </div>
   );
 };

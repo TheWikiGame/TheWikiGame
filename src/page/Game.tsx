@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
 import { History } from "../component/History";
 import { Options } from "../component/Options";
 import { getLinkedInternalPagesFromArticleTitle } from "../api/wikimedia";

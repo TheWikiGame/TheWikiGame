@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Page } from "../model/page";
+import { Page } from "../model/Page";
 import Fuse from "fuse.js";
 import { Input } from "./Input";
 import { PageLink } from "./PageLink";
