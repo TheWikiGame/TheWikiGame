@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { Page } from "../model/page";
+import { InternalLinksResponse } from "../model/InternalLink";
 
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
@@ -28,19 +29,6 @@ async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
     console.error("API call failed:", error);
     throw error;
   }
-}
-
-type InternalLink = {
-  ns: number;
-  exists: string;
-  "*": string;
-};
-
-interface InternalLinksResponse {
-  parse: {
-    title: string;
-    links: Array<InternalLink>;
-  };
 }
 
 async function getPageTitlesOfInternalLinksFromBodyOfArticle(
@@ -89,11 +77,9 @@ function buildPageFromArticleTitle(articleTitle: string): Page {
 async function getLinkedInternalPagesFromArticleTitle(
   articleTitle: string
 ): Promise<Array<Page>> {
-  let pageTitlesOfInternalLinks =
+  const pageTitlesOfInternalLinks =
     await getPageTitlesOfInternalLinksFromBodyOfArticle(articleTitle);
   return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
 }
 
-export {
-  getLinkedInternalPagesFromArticleTitle,
-};
+export { getLinkedInternalPagesFromArticleTitle };
