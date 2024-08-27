@@ -2,16 +2,22 @@ import axios, { AxiosInstance } from "axios";
 import { Page } from "../model/Page";
 import { InternalLinksResponse } from "../model/InternalLink";
 import { WikimediaApiParams } from "../model/Wikimedia";
+import {
+  WikimediaApiAction,
+  WikimediaApiProp,
+  WikimediaApiResponseFormat,
+  WikimediaNamespace,
+} from "./model/WikimediaApiModel";
+import { RandomPageResponse } from "../model/Random";
 
-const BASE_URL = "https://en.wikipedia.org/w/api.php";
+const BASE_WIKIMEDIA_API_ENDPOINT = "https://en.wikipedia.org/w/api.php";
 const ORIGIN_FOR_CORS_SUPPORT = "*";
-const JSON_RESPONSE_FORMAT = "json";
 
 const wikimediaApiClient: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_WIKIMEDIA_API_ENDPOINT,
   params: {
     origin: ORIGIN_FOR_CORS_SUPPORT,
-    format: JSON_RESPONSE_FORMAT,
+    format: WikimediaApiResponseFormat.JSON,
   },
 });
 
@@ -30,27 +36,29 @@ async function getPageTitlesOfInternalLinksFromBodyOfArticle(
   articleTitle: string
 ): Promise<string[]> {
   const retrieveInternalLinksParams: WikimediaApiParams = {
-    action: "parse",
+    action: WikimediaApiAction.Parse,
     page: articleTitle,
-    prop: "links",
-    format: "json",
+    prop: WikimediaApiProp.Links,
+    format: WikimediaApiResponseFormat.JSON,
   };
 
   try {
     const response = await makeWikimediaRequest<InternalLinksResponse>(
       retrieveInternalLinksParams
     );
-    return filterLinksInResponseByNamespace(response);
+    return filterLinksInResponseByNamespace(
+      response,
+      WikimediaNamespace.MainNamespace
+    );
   } catch (error) {
     console.error("Failed to fetch internal links:", error);
     throw new Error("Failed to fetch internal links");
   }
 }
 
-const MAIN_WIKIPEDIA_NAMESPACE = 0;
 function filterLinksInResponseByNamespace(
   response: InternalLinksResponse,
-  namespace: number = MAIN_WIKIPEDIA_NAMESPACE
+  namespace: number
 ): string[] {
   return response.parse.links
     .filter((link) => link.ns === namespace)
@@ -62,11 +70,12 @@ function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
 }
 
 function buildPageFromArticleTitle(articleTitle: string): Page {
+  let wikipediaArticleUrlPrefix = "https://en.wikipedia.org/wiki/";
   return {
     title: articleTitle,
     page: articleTitle,
-    href: `https://en.wikipedia.org/wiki/${articleTitle}`,
-  };
+    href: `${wikipediaArticleUrlPrefix}${articleTitle.replace(" ", "_")}`,
+  } as Page;
 }
 
 async function getLinkedInternalPagesFromArticleTitle(
@@ -77,13 +86,30 @@ async function getLinkedInternalPagesFromArticleTitle(
   return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
 }
 
-async function getRandomPage(): Promise<Page> {
-  // Placeholder
-  return {
-    page: "Cat",
-    title: "Cat",
-    href: "https://en.wikipedia.org/wiki/Cat",
-  } as Page;
+async function retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
+  if (count < 1) return [];
+
+  const retrieveRandomWikipediaArticleParams: WikimediaApiParams = {
+    action: WikimediaApiAction.Query,
+    list: WikimediaApiProp.Random,
+    rnnamespace: WikimediaNamespace.MainNamespace,
+    rnlimit: count.toString(),
+  };
+
+  try {
+    const response = await makeWikimediaRequest<RandomPageResponse>(
+      retrieveRandomWikipediaArticleParams
+    );
+    return response.query.random.map((page) =>
+      buildPageFromArticleTitle(page.title)
+    );
+  } catch (error) {
+    console.error("Failed to fetch random pages:", error);
+    throw new Error("Failed to fetch random pages");
+  }
 }
 
-export { getLinkedInternalPagesFromArticleTitle, getRandomPage };
+export {
+  getLinkedInternalPagesFromArticleTitle,
+  retrieveRandomWikipediaArticles,
+};
