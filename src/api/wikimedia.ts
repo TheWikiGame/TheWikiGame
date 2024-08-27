@@ -80,9 +80,9 @@ function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
 
 function buildPageFromArticleTitle(articleTitle: string): Page {
   return {
-    title: articleTitle,
+    title: articleTitle.replace(" ", "_"),
     page: articleTitle,
-    href: "",
+    href: `https://en.wikipedia.org/wiki/${articleTitle}`,
   };
 }
 
