@@ -86,7 +86,7 @@ function buildPageFromArticleTitle(articleTitle: string): Page {
   };
 }
 
-async function getLinkedInternalPagesFromArticle(
+async function getLinkedInternalPagesFromArticleTitle(
   articleTitle: string
 ): Promise<Array<Page>> {
   let pageTitlesOfInternalLinks =
@@ -95,8 +95,5 @@ async function getLinkedInternalPagesFromArticle(
 }
 
 export {
-  getLinkedInternalPagesFromArticle,
-  buildPageFromArticleTitle,
-  filterLinksInResponseByNamespace,
-  listOfTitlesToListOfPages,
+  getLinkedInternalPagesFromArticleTitle,
 };
