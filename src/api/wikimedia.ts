@@ -80,7 +80,7 @@ function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
 
 function buildPageFromArticleTitle(articleTitle: string): Page {
   return {
-    title: articleTitle.replace(" ", "_"),
+    title: articleTitle,
     page: articleTitle,
     href: `https://en.wikipedia.org/wiki/${articleTitle}`,
   };
@@ -94,6 +94,4 @@ async function getLinkedInternalPagesFromArticleTitle(
   return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
 }
 
-export {
-  getLinkedInternalPagesFromArticleTitle,
-};
+export { getLinkedInternalPagesFromArticleTitle };
