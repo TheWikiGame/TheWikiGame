@@ -8,6 +8,7 @@ import {
 } from "../api/wikimedia/api";
 import { InlinePage } from "../component/InlinePage";
 import { logger } from "../util/Logger";
+import { GameCompletedModal } from "../component/GameCompletedModal";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -22,6 +23,7 @@ export const Game = ({ className, ...props }: GameProps) => {
   });
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   logger.debug("Rendering Game page");
 
   const { start, end, current, history } = useMemo(
@@ -72,14 +74,24 @@ export const Game = ({ className, ...props }: GameProps) => {
     fetchOptions();
   }, [current]);
 
-  const handlePageSelected = useCallback((page: Page) => {
-    setGameState((prevState) => {
-      return {
-        ...prevState,
-        current: page,
-        history: [...prevState.history, page],
-      };
-    });
+  const handlePageSelected = useCallback(
+    (page: Page) => {
+      if (page.href == end?.href) {
+        setModalOpen(true);
+      }
+      setGameState((prevState) => {
+        return {
+          ...prevState,
+          current: page,
+          history: [...prevState.history, page],
+        };
+      });
+    },
+    [end]
+  );
+
+  const handleOnModalClose = useCallback(() => {
+    setModalOpen(false);
   }, []);
 
   if (isLoading || !start || !end || !current) return <>Loading...</>;
@@ -97,6 +109,14 @@ export const Game = ({ className, ...props }: GameProps) => {
           pages={options}
         />
       </div>
+      <GameCompletedModal
+        win={current?.title === end.title}
+        start={start}
+        end={end}
+        history={history}
+        isOpen={modalOpen}
+        onClose={handleOnModalClose}
+      />
     </div>
   );
 };
