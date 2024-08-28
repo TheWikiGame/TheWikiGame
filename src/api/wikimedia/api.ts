@@ -25,6 +25,7 @@ const wikimediaApiClient: AxiosInstance = axios.create({
 
 // Generic function to make Wikimedia API calls
 async function makeWikimediaRequest<T>(params: WikimediaApiParams): Promise<T> {
+  emitDebugLogsForWikimediaRequest(params);
   try {
     const response = await wikimediaApiClient.get("", { params });
     return response.data;
@@ -65,6 +66,10 @@ function filterLinksInResponseByNamespace(
   return response.parse.links
     .filter((link) => link.ns === namespace)
     .map((link) => link["*"]);
+}
+
+function emitDebugLogsForWikimediaRequest(params: WikimediaApiParams) {
+  logger.debug(`makeWikimediaRequest ${JSON.stringify(params, null, 2)}`);
 }
 
 function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
