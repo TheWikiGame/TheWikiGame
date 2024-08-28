@@ -3,6 +3,8 @@ import { InlinePage } from "./InlinePage";
 import { GameOverReason, GameResult } from "../model/GameState";
 import { logger } from "../util/Logger";
 import { Button } from "./Button";
+import { GameOverReason, GameResult } from "../model/GameState";
+import { logger } from "../util/Logger";
 
 type GameCompletedModalProps = {
   result: GameResult;
