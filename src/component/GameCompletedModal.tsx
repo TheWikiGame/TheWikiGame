@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Page } from "../model/Page";
 import { InlinePage } from "./InlinePage";
+import { Button } from "./Button";
 
 type GameCompletedModal = {
   win: boolean;
@@ -50,8 +51,8 @@ export const GameCompletedModal = ({
         </h2>
         <hr />
         <div className={"flex justify-between"}>
-          <button>Share</button>
-          <button onClick={onClose}>Close</button>
+          <Button variant="primary">Share</Button>
+          <Button variant="secondary">Close</Button>
         </div>
       </div>
     </dialog>
