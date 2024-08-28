@@ -7,4 +7,16 @@ type GameState = {
   history: Page[];
 };
 
-export type { GameState };
+enum GameOverReason {
+  Victory,
+  Deadend,
+  Forfeit,
+}
+
+type GameResult = {
+  reason: GameOverReason;
+  history: Page[];
+};
+
+export type { GameState, GameResult };
+export { GameOverReason };

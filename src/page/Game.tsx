@@ -1,97 +1,29 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Page } from "../model/Page";
+import React from "react";
 import { History } from "../component/History";
 import { Options } from "../component/Options";
-import {
-  getLinkedInternalPagesFromArticleTitle,
-  retrieveRandomWikipediaArticles,
-} from "../api/wikimedia/api";
 import { InlinePage } from "../component/InlinePage";
-import { logger } from "../util/Logger";
 import { GameCompletedModal } from "../component/GameCompletedModal";
-import { GameState } from "../model/GameState";
+import { useGameViewModel } from "../viewmodel/GameViewModel";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
 export const Game = ({ className, ...props }: GameProps) => {
-  const [gameState, setGameState] = useState<GameState>({
-    history: [],
-  });
-  const [options, setOptions] = useState<Page[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [optionsLoading, setOptionsLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
-  logger.debug("Rendering Game page");
+  const {
+    gameState,
+    options,
+    isLoading,
+    optionsLoading,
+    modalOpen,
+    gameResult,
+    handlePageSelected,
+    handleForfeit,
+    handleModalClose,
+  } = useGameViewModel();
 
-  const { start, end, current, history } = useMemo(
-    () => gameState,
-    [gameState]
-  );
-
-  useEffect(() => {
-    logger.debug("Initializing game state");
-    const initializeGame = async () => {
-      setIsLoading(true);
-      try {
-        const [startPage, endPage] = await retrieveRandomWikipediaArticles(2);
-        setGameState({
-          start: startPage,
-          end: endPage,
-          current: startPage,
-          history: [startPage],
-        });
-      } catch (error) {
-        logger.error("Failed to fetch linked pages:", error);
-      }
-      setIsLoading(false);
-    };
-
-    initializeGame();
-  }, []);
-
-  useEffect(() => {
-    logger.debug("Retrieving internal links on current page");
-    const fetchOptions = async () => {
-      if (current == undefined) {
-        return;
-      }
-      setOptionsLoading(true);
-      try {
-        const linkedPages = await getLinkedInternalPagesFromArticleTitle(
-          current.title
-        );
-        setOptions(linkedPages);
-      } catch (error) {
-        logger.error("Failed to fetch linked pages:", error);
-        setOptions([]);
-      }
-      setOptionsLoading(false);
-    };
-
-    fetchOptions();
-  }, [current]);
-
-  const handlePageSelected = useCallback(
-    (page: Page) => {
-      if (page.href == end?.href) {
-        setModalOpen(true);
-      }
-      setGameState((prevState) => {
-        return {
-          ...prevState,
-          current: page,
-          history: [...prevState.history, page],
-        };
-      });
-    },
-    [end]
-  );
-
-  const handleOnModalClose = useCallback(() => {
-    setModalOpen(false);
-  }, []);
+  const { start, end, current, history } = gameState;
 
   if (isLoading || !start || !end || !current) return <>Loading...</>;
+
   return (
     <div className={`${className} h-screen`} {...props}>
       <h2 className={""}>
@@ -107,14 +39,14 @@ export const Game = ({ className, ...props }: GameProps) => {
           pages={options}
         />
       </div>
-      <GameCompletedModal
-        win={current?.title === end.title}
-        start={start}
-        end={end}
-        history={history}
-        isOpen={modalOpen}
-        onClose={handleOnModalClose}
-      />
+      <button onClick={handleForfeit}>Forfeit</button>
+      {gameResult && (
+        <GameCompletedModal
+          result={gameResult}
+          isOpen={modalOpen}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 };
