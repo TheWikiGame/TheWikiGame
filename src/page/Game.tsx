@@ -10,6 +10,7 @@ import { InlinePage } from "../component/ui/InlinePage";
 import { logger } from "../util/Logger";
 import { GameCompletedModal } from "../component/modals/GameCompletedModal";
 import { GameState } from "../model/GameState";
+import { PagePreview } from "../component/preview/PagePreview";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -97,15 +98,16 @@ export const Game = ({ className, ...props }: GameProps) => {
       <h2 className={""}>
         From <InlinePage page={start} /> to <InlinePage page={end} />
       </h2>
-      <div className={`grid grid-cols-4 gap-4 h-full`}>
+      <div className={`grid grid-cols-6 gap-4 h-full`}>
         <History className={"col-span-1"} pages={history} />
         <Options
           loading={optionsLoading}
           currentPage={current}
-          className={"col-span-3"}
+          className={"col-span-2"}
           onSelect={handlePageSelected}
           pages={options}
         />
+        <PagePreview page={current} className="col-span-3 h-screen" />
       </div>
       <GameCompletedModal
         win={current?.title === end.title}
