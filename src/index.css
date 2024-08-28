@@ -13,10 +13,17 @@
   -moz-osx-font-smoothing: grayscale;
 
   --bg-primary: theme("colors.white");
+  --bg-secondary: theme("colors.gray.200");
+  --bg-secondary-hover: theme("colors.gray.100");
+  --bg-secondary-active: theme("colors.gray.300");
+  --bg-accent: theme("colors.blue.600");
+  --bg-accent-hover: theme("colors.blue.500");
+  --bg-accent-active: theme("colors.blue.700");
+
   --text-primary: theme("colors.gray.900");
-  --bg-secondary: theme("colors.gray.100");
   --text-secondary: theme("colors.blue.600");
-  --text-secondary-hover: theme("colors.blue.400");
+  --text-secondary-hover: theme("colors.blue.500");
+
   --border-color: theme("colors.gray.300");
 
   color: var(--text-primary);
@@ -25,10 +32,17 @@
 
 .dark {
   --bg-primary: theme("colors.gray.900");
+  --bg-secondary: theme("colors.gray.700");
+  --bg-secondary-hover: theme("colors.gray.600");
+  --bg-secondary-active: theme("colors.gray.800");
+  --bg-accent: theme("colors.blue.400");
+  --bg-accent-hover: theme("colors.blue.300");
+  --bg-accent-active: theme("colors.blue.500");
+
   --text-primary: theme("colors.gray.100");
-  --bg-secondary: theme("colors.gray.800");
-  --text-secondary: theme("colors.blue.400");
-  --text-secondary-hover: theme("colors.blue.200");
+  --text-secondary: theme("colors.blue.500");
+  --text-secondary-hover: theme("colors.blue.400");
+
   --border-color: theme("colors.gray.300");
 
   color: var(--text-primary);
