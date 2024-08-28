@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Page } from "../model/Page";
-import { History } from "../component/History";
-import { Options } from "../component/Options";
+import { History } from "../component/history/History";
+import { Options } from "../component/options/Options";
 import {
   getLinkedInternalPagesFromArticleTitle,
   retrieveRandomWikipediaArticles,
 } from "../api/wikimedia/api";
-import { InlinePage } from "../component/InlinePage";
+import { InlinePage } from "../component/ui/InlinePage";
 import { logger } from "../util/Logger";
-import { GameCompletedModal } from "../component/GameCompletedModal";
+import { GameCompletedModal } from "../component/modals/GameCompletedModal";
 import { GameState } from "../model/GameState";
 
 type GameProps = {} & React.ComponentProps<"div">;

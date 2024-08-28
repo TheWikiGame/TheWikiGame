@@ -1,5 +1,5 @@
-import { Page } from "../model/Page";
-import { PageHistory } from "./PageHistory";
+import { Page } from "../../model/Page";
+import { PageHistory } from "../history/PageHistory";
 
 type HistoryProps = {
   pages: Page[];

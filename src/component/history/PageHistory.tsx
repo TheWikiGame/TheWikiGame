@@ -1,6 +1,6 @@
 import React from "react";
-import { Page } from "../model/Page";
-import { PageLink } from "./PageLink";
+import { Page } from "../../model/Page";
+import { PageLink } from "../ui/PageLink";
 // import { Circle, ArrowDown } from "lucide-react";
 
 type PageHistoryProps = {

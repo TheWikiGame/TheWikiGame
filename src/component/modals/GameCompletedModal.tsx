@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { Page } from "../model/Page";
-import { InlinePage } from "./InlinePage";
-import { Button } from "./Button";
+import { Page } from "../../model/Page";
+import { InlinePage } from "../ui/InlinePage";
+import { Button } from "../ui/Button";
 
 type GameCompletedModal = {
   win: boolean;

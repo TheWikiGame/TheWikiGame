@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 
 type PageFilterProps = {} & React.ComponentProps<"input">;
 
-export const PageFilter = ({ className, ...props }: PageFilterProps) => {
+export const SearchInput = ({ className, ...props }: PageFilterProps) => {
   return (
     <div className={`relative ${className}`}>
       <input
