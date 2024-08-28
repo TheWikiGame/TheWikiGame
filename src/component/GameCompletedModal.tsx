@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { InlinePage } from "./InlinePage";
 import { GameOverReason, GameResult } from "../model/GameState";
 import { logger } from "../util/Logger";
+import { Button } from "./Button";
 
 type GameCompletedModalProps = {
   result: GameResult;
@@ -74,8 +75,12 @@ export const GameCompletedModal = ({
         <h2>{getModalContent()}</h2>
         <hr />
         <div className={"flex justify-between"}>
-          <button onClick={handleShareClick}>Share</button>
-          <button onClick={onClose}>Close</button>
+          <Button variant="primary" onClick={handleShareClick}>
+            Share
+          </Button>
+          <Button variant="secondary" onClick={onClose}>
+            Close
+          </Button>
         </div>
       </div>
     </dialog>
