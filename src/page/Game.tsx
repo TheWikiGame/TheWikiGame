@@ -2,15 +2,12 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Page } from "../model/Page";
 import { History } from "../component/history/History";
 import { Options } from "../component/options/Options";
-import {
-  getLinkedInternalPagesFromArticleTitle,
-  retrieveRandomWikipediaArticles,
-} from "../api/wikimedia/api";
 import { InlinePage } from "../component/ui/InlinePage";
 import { logger } from "../util/Logger";
 import { GameCompletedModal } from "../component/modals/GameCompletedModal";
 import { GameState } from "../model/GameState";
 import { PagePreview } from "../component/preview/PagePreview";
+import { wikimediaDataSource } from "../data/WikimediaDataSource";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -34,7 +31,8 @@ export const Game = ({ className, ...props }: GameProps) => {
     const initializeGame = async () => {
       setIsLoading(true);
       try {
-        const [startPage, endPage] = await retrieveRandomWikipediaArticles(2);
+        const [startPage, endPage] =
+          await wikimediaDataSource.retrieveRandomWikipediaArticles(2);
         setGameState({
           start: startPage,
           end: endPage,
@@ -58,9 +56,10 @@ export const Game = ({ className, ...props }: GameProps) => {
       }
       setOptionsLoading(true);
       try {
-        const linkedPages = await getLinkedInternalPagesFromArticleTitle(
-          current.title
-        );
+        const linkedPages =
+          await wikimediaDataSource.getLinkedInternalPagesFromArticleTitle(
+            current.title
+          );
         setOptions(linkedPages);
       } catch (error) {
         logger.error("Failed to fetch linked pages:", error);
