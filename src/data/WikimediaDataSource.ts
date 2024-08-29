@@ -1,7 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 import { WikimediaExtractResponse } from "../model/Extract";
 import { InternalLinksResponse } from "../model/InternalLink";
-import { Page } from "../model/Page";
+import {
+  buildPageFromArticleTitle,
+  listOfTitlesToListOfPages,
+  Page,
+} from "../model/Page";
 import { RandomPageResponse } from "../model/Random";
 import { logger } from "../util/Logger";
 import { WikiGameDataSource } from "./WikiGameDataSource";
@@ -76,25 +80,12 @@ class WikimediaApiDataSource implements WikiGameDataSource {
     logger.debug(`makeWikimediaRequest ${JSON.stringify(params, null, 2)}`);
   }
 
-  listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
-    return titles.map((title) => this.buildPageFromArticleTitle(title));
-  }
-
-  buildPageFromArticleTitle(articleTitle: string): Page {
-    let wikipediaArticleUrlPrefix = "https://en.wikipedia.org/wiki/";
-    return {
-      title: articleTitle,
-      page: articleTitle,
-      href: `${wikipediaArticleUrlPrefix}${articleTitle.replace(" ", "_")}`,
-    } as Page;
-  }
-
   async getLinkedInternalPagesFromArticleTitle(
     articleTitle: string
   ): Promise<Array<Page>> {
     const pageTitlesOfInternalLinks =
       await this.getPageTitlesOfInternalLinksFromBodyOfArticle(articleTitle);
-    return this.listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
+    return listOfTitlesToListOfPages(pageTitlesOfInternalLinks);
   }
 
   async retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
@@ -112,7 +103,7 @@ class WikimediaApiDataSource implements WikiGameDataSource {
         retrieveRandomWikipediaArticleParams
       );
       return response.query.random.map((page) =>
-        this.buildPageFromArticleTitle(page.title)
+        buildPageFromArticleTitle(page.title)
       );
     } catch (error) {
       logger.error("Failed to fetch random pages:", error);
