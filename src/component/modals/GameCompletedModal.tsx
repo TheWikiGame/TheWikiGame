@@ -52,7 +52,9 @@ export const GameCompletedModal = ({
         <hr />
         <div className={"flex justify-between"}>
           <Button variant="primary">Share</Button>
-          <Button variant="secondary">Close</Button>
+          <Button variant="secondary" onClick={onClose}>
+            Close
+          </Button>
         </div>
       </div>
     </dialog>
