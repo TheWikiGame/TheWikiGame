@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Page } from "../model/Page";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { History } from "../component/history/History";
-import { Options } from "../component/options/Options";
-import { InlinePage } from "../component/ui/InlinePage";
-import { logger } from "../util/Logger";
 import { GameCompletedModal } from "../component/modals/GameCompletedModal";
-import { GameState } from "../model/GameState";
+import { Options } from "../component/options/Options";
 import { PagePreview } from "../component/preview/PagePreview";
-import { wikimediaDataSource } from "../data/WikimediaDataSource";
+import { InlinePage } from "../component/ui/InlinePage";
+import { dataSourceController } from "../data/DataSourceController";
+import { GameState } from "../model/GameState";
+import { Page } from "../model/Page";
+import { logger } from "../util/Logger";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
@@ -32,7 +32,7 @@ export const Game = ({ className, ...props }: GameProps) => {
       setIsLoading(true);
       try {
         const [startPage, endPage] =
-          await wikimediaDataSource.retrieveRandomWikipediaArticles(2);
+          await dataSourceController.retrieveRandomWikipediaArticles(2);
         setGameState({
           start: startPage,
           end: endPage,
@@ -57,7 +57,7 @@ export const Game = ({ className, ...props }: GameProps) => {
       setOptionsLoading(true);
       try {
         const linkedPages =
-          await wikimediaDataSource.getLinkedInternalPagesFromArticleTitle(
+          await dataSourceController.getLinkedInternalPagesFromArticleTitle(
             current.title
           );
         setOptions(linkedPages);
