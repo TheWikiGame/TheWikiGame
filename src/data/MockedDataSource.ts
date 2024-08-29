@@ -1,11 +1,15 @@
 import { listOfTitlesToListOfPages, Page } from "../model/Page";
+import { logger } from "../util/Logger";
 import { WikiGameDataSource } from "./WikiGameDataSource";
 
 class MockedDataSource implements WikiGameDataSource {
   async getLinkedInternalPagesFromArticleTitle(
     articleTitle: string
   ): Promise<Array<Page>> {
-    return listOfTitlesToListOfPages([...this.mockArticleTitles, articleTitle]);
+    logger.debug(
+      `Mocking getLinkedInternalPagesFromArticleTitle for ${articleTitle}`
+    );
+    return listOfTitlesToListOfPages(this.mockArticleTitles);
   }
 
   async retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
