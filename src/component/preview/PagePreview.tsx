@@ -18,7 +18,7 @@ export const PagePreview = ({
         src={page.href}
         className="w-full h-full"
         title={page.title}
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-same-origin"
       ></iframe>
     </div>
   );
