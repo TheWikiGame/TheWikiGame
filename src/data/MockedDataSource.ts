@@ -9,7 +9,9 @@ class MockedDataSource implements WikiGameDataSource {
     logger.debug(
       `Mocking getLinkedInternalPagesFromArticleTitle for ${articleTitle}`
     );
-    return listOfTitlesToListOfPages(this.mockArticleTitles);
+    const articleSet = new Set(this.mockArticleTitles);
+    articleSet.delete(articleTitle);
+    return listOfTitlesToListOfPages(Array.from(articleSet));
   }
 
   async retrieveRandomWikipediaArticles(count: number): Promise<Page[]> {
