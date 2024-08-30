@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { Page } from "../../model/Page";
 import { InlinePage } from "../ui/InlinePage";
 import { Button } from "../ui/Button";
+import { GameOverReason, GameResult } from "../../model/GameState";
+import { handleShare } from "../../feature/share-results/CopyResultsToClipboard";
 
 type GameCompletedModal = {
   win: boolean;
@@ -23,6 +25,7 @@ export const GameCompletedModal = ({
   ...props
 }: GameCompletedModal) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const copiedTextRef = useRef(HTMLSpanElement);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -35,6 +38,25 @@ export const GameCompletedModal = ({
       dialog.close();
     }
   }, [isOpen]);
+
+  function handleShareButtonClick() {
+    const text = copiedTextRef.current;
+    if (!text) {
+      return;
+    }
+    handleShare({
+      reason: GameOverReason.Victory,
+      history,
+    } as GameResult);
+    text.classList.remove("opacity-0");
+    setTimeout(() => {
+      const text = copiedTextRef.current;
+      if (!text) {
+        return;
+      }
+      text.classList.add("opacity-0");
+    }, 1250);
+  }
 
   return (
     <dialog
@@ -51,12 +73,23 @@ export const GameCompletedModal = ({
         </h2>
         <hr />
         <div className={"flex justify-between"}>
-          <Button variant="primary">Share</Button>
+          <Button variant="primary" onClick={handleShareButtonClick}>
+            Share
+          </Button>
           <Button variant="secondary" onClick={onClose}>
             Close
           </Button>
         </div>
       </div>
+      <span
+        ref={copiedTextRef}
+        className="opacity-0 absolute left-12 bottom-8 rotate-12 transition duration-300"
+        style={{
+          animationDuration: "1.25s",
+        }}
+      >
+        Copied!
+      </span>
     </dialog>
   );
 };
