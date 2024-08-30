@@ -9,8 +9,8 @@ function listOfTitlesToListOfPages(titles: Array<string>): Array<Page> {
 }
 
 function buildPageFromArticleTitle(articleTitle: string): Page {
-  let wikipediaArticleUrlPrefix = "https://en.wikipedia.org/wiki/";
-  let pageName = articleTitle.replace(" ", "_");
+  const wikipediaArticleUrlPrefix = "https://en.wikipedia.org/wiki/";
+  const pageName = articleTitle.replace(" ", "_");
   return {
     title: articleTitle,
     page: pageName,

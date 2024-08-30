@@ -25,7 +25,7 @@ export const GameCompletedModal = ({
   ...props
 }: GameCompletedModal) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const copiedTextRef = useRef(HTMLSpanElement);
+  const copiedTextRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;

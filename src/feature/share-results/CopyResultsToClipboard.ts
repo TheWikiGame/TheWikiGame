@@ -22,19 +22,19 @@ function getShareTextFromGameResult(result: GameResult): string {
 }
 
 function getShareTextForVictory(history: Page[]): string {
-  let startPage = history[0];
-  let endPage = history[history.length - 1];
-  let numberOfMoves = history.length - 1;
-  let res = `I got from ${startPage.title} to ${endPage.title} in ${numberOfMoves}!`;
+  const startPage = history[0];
+  const endPage = history[history.length - 1];
+  const numberOfMoves = history.length - 1;
+  const res = `I got from ${startPage.title} to ${endPage.title} in ${numberOfMoves}!`;
   return res;
 }
 function getShareTextForDeadend(): string {
-  let res = "";
+  const res = "";
   return res;
 }
 
 function getShareTextForForfeit(): string {
-  let res = "";
+  const res = "";
   return res;
 }
 

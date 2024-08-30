@@ -56,7 +56,7 @@ class Logger {
   }
 
   isDevMode(): boolean {
-    let isDevMode = import.meta.env.DEV;
+    const isDevMode = import.meta.env.DEV;
     return isDevMode;
   }
 }
