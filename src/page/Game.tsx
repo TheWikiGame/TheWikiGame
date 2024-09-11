@@ -8,17 +8,17 @@ import { dataSourceController } from "../data/DataSourceController";
 import { GameState } from "../model/GameState";
 import { Page } from "../model/Page";
 import { logger } from "../util/Logger";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useLocalStorage from "../feature/local-storage/LocalStorageHook";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
 export const Game = ({ className, ...props }: GameProps) => {
   const { gameId } = useParams<{ gameId: string }>();
-  const validGameId = gameId || crypto.randomUUID();
-  const [gameState, setGameState] = useLocalStorage<GameState>(validGameId, {
+  const [gameState, setGameState] = useLocalStorage<GameState>(gameId || "", {
     history: [],
   });
+  const navigate = useNavigate();
 
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +30,13 @@ export const Game = ({ className, ...props }: GameProps) => {
     () => gameState,
     [gameState]
   );
+
+  useEffect(() => {
+    if (gameId) {
+      return;
+    }
+    navigate(`/${crypto.randomUUID()}`, { replace: true });
+  }, [gameId, navigate]);
 
   useEffect(() => {
     logger.debug("Initializing game state");
@@ -56,7 +63,7 @@ export const Game = ({ className, ...props }: GameProps) => {
     };
 
     initializeGame();
-  }, [start, end, gameState]);
+  }, [start, end, gameState, gameId, setGameState]);
 
   useEffect(() => {
     logger.debug("Retrieving internal links on current page");
