@@ -14,7 +14,7 @@ function App() {
             element={<PageLayout header={"The Wiki Game"} content={<Game />} />}
           />
           <Route
-            path="/:game_id"
+            path="/:gameId"
             element={<PageLayout header={"The Wiki Game"} content={<Game />} />}
           />
         </Routes>

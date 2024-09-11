@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 const useLocalStorage = <T>(key: string, defaultValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
+    if (!key) return defaultValue;
     if (typeof window === "undefined") return defaultValue;
 
     try {

@@ -8,13 +8,18 @@ import { dataSourceController } from "../data/DataSourceController";
 import { GameState } from "../model/GameState";
 import { Page } from "../model/Page";
 import { logger } from "../util/Logger";
+import { useParams } from "react-router-dom";
+import useLocalStorage from "../feature/local-storage/LocalStorageHook";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
 export const Game = ({ className, ...props }: GameProps) => {
-  const [gameState, setGameState] = useState<GameState>({
+  const { gameId } = useParams<{ gameId: string }>();
+  const validGameId = gameId || crypto.randomUUID();
+  const [gameState, setGameState] = useLocalStorage<GameState>(validGameId, {
     history: [],
   });
+
   const [options, setOptions] = useState<Page[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [optionsLoading, setOptionsLoading] = useState(true);
@@ -29,6 +34,10 @@ export const Game = ({ className, ...props }: GameProps) => {
   useEffect(() => {
     logger.debug("Initializing game state");
     const initializeGame = async () => {
+      if (start && end) {
+        logger.debug(`Game already exists with id ${gameId}`);
+        return;
+      }
       setIsLoading(true);
       try {
         const [startPage, endPage] =
@@ -39,6 +48,7 @@ export const Game = ({ className, ...props }: GameProps) => {
           current: startPage,
           history: [startPage],
         });
+        logger.debug(`Created new game with id ${gameId}`);
       } catch (error) {
         logger.error("Failed to fetch linked pages:", error);
       }
@@ -46,7 +56,7 @@ export const Game = ({ className, ...props }: GameProps) => {
     };
 
     initializeGame();
-  }, []);
+  }, [start, end, gameState]);
 
   useEffect(() => {
     logger.debug("Retrieving internal links on current page");
@@ -76,13 +86,11 @@ export const Game = ({ className, ...props }: GameProps) => {
       if (page.href == end?.href) {
         setModalOpen(true);
       }
-      setGameState((prevState) => {
-        return {
-          ...prevState,
-          current: page,
-          history: [...prevState.history, page],
-        };
-      });
+      setGameState((prevState) => ({
+        ...prevState,
+        current: page,
+        history: [...prevState.history, page],
+      }));
     },
     [end]
   );
