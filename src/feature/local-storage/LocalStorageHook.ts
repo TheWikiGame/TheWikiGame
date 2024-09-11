@@ -27,4 +27,27 @@ const useLocalStorage = <T>(key: string, defaultValue: T) => {
   return [storedValue, setStoredValue] as const;
 };
 
-export default useLocalStorage;
+const useSyncedLocalStorage = <T>(key: string, initialValue: T) => {
+  const [storedValue, setStoredValue] = useLocalStorage<T>(key, initialValue);
+
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === key) {
+        const newValue = event.newValue
+          ? JSON.parse(event.newValue)
+          : initialValue;
+        setStoredValue(newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [key, initialValue, setStoredValue]);
+
+  return [storedValue, setStoredValue] as const;
+};
+
+export { useSyncedLocalStorage, useLocalStorage };

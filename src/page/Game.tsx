@@ -9,15 +9,18 @@ import { GameState } from "../model/GameState";
 import { Page } from "../model/Page";
 import { logger } from "../util/Logger";
 import { useNavigate, useParams } from "react-router-dom";
-import useLocalStorage from "../feature/local-storage/LocalStorageHook";
+import { useSyncedLocalStorage } from "../feature/local-storage/LocalStorageHook";
 
 type GameProps = {} & React.ComponentProps<"div">;
 
 export const Game = ({ className, ...props }: GameProps) => {
   const { gameId } = useParams<{ gameId: string }>();
-  const [gameState, setGameState] = useLocalStorage<GameState>(gameId || "", {
-    history: [],
-  });
+  const [gameState, setGameState] = useSyncedLocalStorage<GameState>(
+    gameId || "",
+    {
+      history: [],
+    }
+  );
   const navigate = useNavigate();
 
   const [options, setOptions] = useState<Page[]>([]);
