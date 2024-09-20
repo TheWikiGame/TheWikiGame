@@ -55,7 +55,7 @@ export const Options = ({
   return (
     <div className={`${className}`} {...props}>
       <h2>
-        Links from <InlinePage page={currentPage} />
+        Links from <InlinePage page={currentPage} key={currentPage.href} />
       </h2>
       <SearchInput
         value={searchText}
