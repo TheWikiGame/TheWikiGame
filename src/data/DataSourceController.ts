@@ -20,6 +20,16 @@ class DataSourceController {
     return this.currentDataSource.retrieveRandomWikipediaArticles(count);
   }
 
+  async getFirstParagraphOfArticleWithTitle(articleTitle: string) {
+    return this.currentDataSource.getFirstParagraphOfArticleWithTitle(
+      articleTitle
+    );
+  }
+
+  async getFirstImageOfArticleWithTitle(articleTitle: string) {
+    return this.currentDataSource.getFirstImageOfArticleWithTitle(articleTitle);
+  }
+
   private selectDataSource(): WikiGameDataSource {
     const isOnline = navigator.onLine;
     logger.debug(

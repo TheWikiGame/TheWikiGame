@@ -28,6 +28,13 @@ class MockedDataSource implements WikiGameDataSource {
     return `This is a mock first paragraph for the article "${articleTitle}".`;
   }
 
+  async getFirstImageOfArticleWithTitle(articleTitle: string): Promise<string> {
+    logger.debug(
+      `Mocking getThumbnailImageOfArticleWithTitle for ${articleTitle}`
+    );
+    return "";
+  }
+
   private mockArticleTitles: string[] = [
     "Mock Page 1",
     "Mock Page 2",

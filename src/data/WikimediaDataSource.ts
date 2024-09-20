@@ -17,6 +17,8 @@ import {
   WikimediaNamespace,
 } from "./WikimediaModel";
 
+import md5 from "md5";
+
 class WikimediaApiDataSource implements WikiGameDataSource {
   private apiClient: AxiosInstance;
   constructor() {
@@ -134,6 +136,53 @@ class WikimediaApiDataSource implements WikiGameDataSource {
       return pages[pageId].extract;
     } catch (error) {
       logger.error("Failed to fetch article abstract:", error);
+      return "";
+    }
+  }
+
+  async getFirstImageOfArticleWithTitle(articleTitle: string): Promise<string> {
+    const constructLink = (filename: string): string => {
+      // Remove the "File:" prefix if present
+      const cleanFilename = filename
+        .replace(/^File:/, "")
+        .split(" ")
+        .join("_");
+
+      console.log(filename);
+
+      // URL encode the filename
+      // const encodedFilename = encodeURIComponent(cleanFilename);
+
+      // Generate an MD5 hash of the filename
+      const hash = md5(cleanFilename);
+
+      // Extract the first two characters of the MD5 hash
+      const hashStart = hash.substring(0, 2);
+
+      // Construct the URL
+      return `https://upload.wikimedia.org/wikipedia/commons/${hashStart[0]}/${hashStart}/${cleanFilename}`;
+    };
+
+    const retrieveAllImagesParams: WikimediaApiParams = {
+      action: WikimediaApiAction.Query,
+      prop: WikimediaApiProp.Images,
+      titles: articleTitle,
+      format: WikimediaApiResponseFormat.JSON,
+      origin: "*",
+    };
+
+    try {
+      const response =
+        await this.makeWikimediaRequest<WikimediaExtractResponse>(
+          retrieveAllImagesParams
+        );
+      const pages = response.query.pages;
+      const pageId = Object.keys(pages)[0];
+      const images = pages[pageId].images;
+      const image = images![0] || "";
+      return constructLink(image.title);
+    } catch (error) {
+      logger.error("Failed to fetch article thumbnail:", error);
       return "";
     }
   }

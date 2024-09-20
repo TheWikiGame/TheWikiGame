@@ -12,6 +12,7 @@ enum WikimediaApiProp {
   Links = "links",
   Random = "random",
   Extracts = "extracts",
+  Images = "images",
 }
 
 enum WikimediaApiResponseFormat {
